@@ -1,0 +1,38 @@
+<head>
+  <title>jshack</title>
+</head>
+
+<body>
+  {{> sidebar}}
+  {{> canvas}}
+  {{> textBox}}
+</body>
+
+<template name="canvas">
+	<div class="canvas-container">
+		<div class="draggable dragme">
+			<canvas id="GUI" class="dragme"></canvas>
+		</div>
+		<div class="canvas-div">
+			<canvas id="JSHack" class="primary-canvas"></canvas>
+
+		</div>
+	</div>
+</template>
+
+<template name="sidebar">
+	<div class="sidebar">
+		<ul>
+			{{#each commands}}
+				<li>{{ text }}</li>
+			{{/each}}
+		</ul>
+	</div>
+</template>
+
+<template name="textBox">
+	<div class="textbox">
+		<input type="text" placeholdee="type a command here!">
+		<button type="button" id="commandsubmit"> Submit </button> 
+	</div>
+</template>
