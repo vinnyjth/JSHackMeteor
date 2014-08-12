@@ -32,7 +32,11 @@
 
 <template name="textBox">
 	<div class="textbox">
-		<input type="text" placeholdee="type a command here!">
-		<button type="button" id="commandsubmit"> Submit </button> 
+		<form>
+			<input type="text" placeholder="type a command here!" name="command" id="command-box">
+			<input type="submit" id="commandsubmit">
+		</form>
 	</div>
+
+	{{> loginButtons }}
 </template>
