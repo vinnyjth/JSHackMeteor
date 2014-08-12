@@ -1,6 +1,4 @@
 function mapGenerator(sizeX, sizeY) {
-    var map = [];
-    this.map = map;
     var fovMap = [];
     this.fovMap = [];
     var mapCol = [];
@@ -44,13 +42,13 @@ function mapGenerator(sizeX, sizeY) {
     this.cellularStep = cellularStep;
 
     function cellularStep(map) {
-        var newMap = []
+        var newMap = [];
         var deathLimit = 3;
         var birthLimit = 5;
         for (var y = 0; y < map.length; y++) {
-            var mapRow = []
+            var mapRow = [];
             for (var x = 0; x < map[y].length; x++) {
-                wallsAround = countAliveNeighbors(map, x, y);
+                var wallsAround = countAliveNeighbors(map, x, y);
 
                 if (map[y][x] == 0) {
                     if (wallsAround > 4) {
@@ -72,10 +70,10 @@ function mapGenerator(sizeX, sizeY) {
         return newMap;
     };
 
-    this.buildCave = buildCave
+    this.buildCave = buildCave;
 
     function buildCave(steps) {
-        theMaze = randomMaze();
+        var theMaze = randomMaze();
         for (var i = 0; i < steps; i++) {
             theMaze = cellularStep(theMaze);
         };
@@ -88,8 +86,8 @@ function countAliveNeighbors(map, cellX, cellY) {
     var count = 0;
     for (var i = -1; i < 2; i++) {
         for (var j = -1; j < 2; j++) {
-            neighborX = cellX + j;
-            neighborY = cellY + i;
+            var neighborX = cellX + j;
+            var neighborY = cellY + i;
             if (i == 0 && j == 0) {} else if (neighborX < 0 || neighborY < 0 || neighborY >= map.length || neighborX > map[0].length) {
                 count++;
             } else if (map[neighborY][neighborX] == 0) {
@@ -123,7 +121,7 @@ function calculateFOV(map, player, viewRadius) {
     for (var i = 0; i < 360; i += 8) {
         var x = Math.ceil(Math.cos(i) * 0.01745);
         var y = Math.ceil(Math.sin(i) * 0.01745);
-        console.log(x + " " + y)
+        console.log(x + " " + y);
         calculateRealFOV(x, y, player, viewRadius, map, map.fovMap);
     }
 }
