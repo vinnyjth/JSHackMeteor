@@ -183,6 +183,7 @@ function drawScreen(elements, canvasToDrawTo) {
 
 
 Meteor.startup(function(){
+
     canvas = document.getElementById('JSHack');
      c = canvas.getContext('2d');
 
@@ -297,18 +298,18 @@ Meteor.startup(function(){
 
     //move the player to a specific point in the map
 
-
-
     //do stuff that needs to be done every frame. The main game loop.
 
-    Deps.autorun(function(){
 
-    });
 });
-Meteor.subscribe('mazes', function(){
-    drawMap(Mazes.find().fetch()[0].map, 1);
-    drawPlayer();
+Deps.autorun(function(){
+    Meteor.subscribe('mazes',function(){
+        drawMap(Mazes.findOne().map, 1);
+        drawPlayer();
 
-    drawScreen(e, c);
-    drawScreen(g, gui);
+        drawScreen(e, c);
+        drawScreen(g, gui);
+    });
+
+
 });

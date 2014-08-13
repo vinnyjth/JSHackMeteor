@@ -124,7 +124,7 @@ function calculateFOV(map, player, viewRadius) {
         console.log(x + " " + y);
         calculateRealFOV(x, y, player, viewRadius, map, map.fovMap);
     }
-}
+};
 
 function calculateRealFOV(x, y, player, viewRadius, level, fovMap) {
     var dx = (player.loc.x / tileSize.x);
@@ -141,7 +141,7 @@ function calculateRealFOV(x, y, player, viewRadius, level, fovMap) {
         dy += y;
 
     }
-}
+};
 
 function movePlayer(desiredX, desiredY) {
     var locInMaze = mainMap[desiredY / tileSize.y][desiredX / tileSize.x];
@@ -166,7 +166,11 @@ function createMap(name, mapGenerator){
 }
 
 
-
+function redoMap(name, mapGenerator){
+    var generator = new mapGenerator(size.x / tileSize.x, size.y / tileSize.y);
+    var mainMap = generator.buildCave(2);
+    return Mazes.update({name: name}, {map: mainMap});
+}
 Meteor.startup(function() {
 
 	if(Mazes.find().fetch().length === 0){
@@ -183,3 +187,17 @@ Meteor.publish('mazes', function(){
 	return Mazes.find();
 });
 
+Deps.autorun(function(){
+
+});
+
+Meteor.methods({
+   newCommand: function(command, userId){
+        Commands.insert({text: command, when: new Date()});
+        if(command === "newmap"){
+            return redoMap(Mazes.findOne().name, mapGenerator);
+        }else{
+            return command;
+        }
+   }
+});

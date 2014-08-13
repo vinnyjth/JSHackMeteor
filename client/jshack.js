@@ -12,11 +12,10 @@ Template.textBox.events({
 	'submit form': function (e){
 		e.preventDefault();
 		var box = $("#command-box");
-		var command = {
-			text: box.val()
-		};
+        Meteor.call('newCommand', box.val(), 1, function(err, res){
+            console.log(res);
+        });
 		box.val("");
-		Commands.insert(command);
 	}
 });
 
