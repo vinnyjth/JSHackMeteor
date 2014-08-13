@@ -1,3 +1,5 @@
+
+
 function mouseClickedMainCanvas(event) {
     //grab the location of the mouse in tile units
     mapX = Math.floor(event.offsetX / tileSize.x);
@@ -299,17 +301,17 @@ Meteor.startup(function(){
     //move the player to a specific point in the map
 
     //do stuff that needs to be done every frame. The main game loop.
+    Deps.autorun(function(){
+        if(Mazes.findOne()){
+            drawMap(Mazes.findOne().map, 1);
+            drawPlayer();
+
+            drawScreen(e, c);
+            drawScreen(g, gui);
+            console.log(Mazes.findOne());
+        }
 
 
-});
-Deps.autorun(function(){
-    Meteor.subscribe('mazes',function(){
-        drawMap(Mazes.findOne().map, 1);
-        drawPlayer();
-
-        drawScreen(e, c);
-        drawScreen(g, gui);
     });
-
 
 });

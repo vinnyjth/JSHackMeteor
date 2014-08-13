@@ -1,4 +1,5 @@
 Meteor.subscribe('commands');
+Meteor.subscribe('mazes');
 
 
 
