@@ -34,6 +34,11 @@ body{
     border: 5px solid #6cabd9;
     display: inline-block;
 	vertical-align: middle;
+    height: 500px;
+}
+.sidebar-content{
+    overflow: scroll;
+    height: 500px;
 }
 ul{
 	list-style-type: none;

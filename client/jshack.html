@@ -3,10 +3,15 @@
 </head>
 
 <body>
-  {{> sidebar}}
-  {{> canvas}}
-  {{> textBox}}
+
+{{> jshackApp}}
 </body>
+
+<template name="jshackApp">
+    {{> sidebar}}
+    {{> canvas}}
+    {{> textBox}}
+</template>
 
 <template name="canvas">
 	<div class="canvas-container">
@@ -14,7 +19,7 @@
 			<canvas id="GUI" class="dragme"></canvas>
 		</div>
 		<div class="canvas-div">
-			<canvas id="JSHack" class="primary-canvas"></canvas>
+			<canvas id="JSHack" class="primary-canvas" tabindex="1"></canvas>
 
 		</div>
 	</div>
@@ -22,12 +27,19 @@
 
 <template name="sidebar">
 	<div class="sidebar">
-		<ul>
-			{{#each commands}}
-				<li>{{ text }}</li>
-			{{/each}}
-		</ul>
+        <div class="sidebar-content">
+            <ul>
+                {{#each commands}}
+                    {{> command}}
+                {{/each}}
+            </ul>
+        </div>
+
 	</div>
+</template>
+
+<template name="command">
+    <li style="display: none;">{{ text }}</li>
 </template>
 
 <template name="textBox">

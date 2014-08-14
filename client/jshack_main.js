@@ -291,18 +291,15 @@ Meteor.startup(function(){
     Deps.autorun(function(){
         if(Mazes.findOne()){
             drawMap(Mazes.findOne().map, 1);
-            if(Heroes.findOne()){
-                drawPlayer(Heroes.findOne());
-            }
 
             drawScreen(e, c);
-            drawScreen(g, gui);
-            console.log(Mazes.findOne());
         }
+    Deps.autorun(function(){
         if(Heroes.findOne()){
             drawPlayer(Heroes.findOne());
+            drawScreen(e, c);
         }
-
+    });
 
     });
 
