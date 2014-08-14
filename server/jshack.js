@@ -100,17 +100,12 @@ function countAliveNeighbors(map, cellX, cellY) {
 
 
 
-function placePlayerInMap(map) {
-    var playerMapLocation = {
-        x: 0,
-        y: 0
-    };
+function placePlayerInMap(map, player) {
     for (var dy = 0; dy < map.length; dy++) {
         for (var dx = 0; dx < map[dy].length; dx++) {
             if (map[dy][dx] == 1 && countAliveNeighbors(map, dx, dy) > 4) {
-                //drawPlayer();
-                //movePlayer(dx * tileSize.x, dy * tileSize.y);
-                return;
+                return Heroes.update({name: player}, {name: player, loc:{x: dx, y: dy}});
+
             }
         }
     }
@@ -143,15 +138,10 @@ function calculateRealFOV(x, y, player, viewRadius, level, fovMap) {
     }
 };
 
-function movePlayer(desiredX, desiredY) {
-    var locInMaze = mainMap[desiredY / tileSize.y][desiredX / tileSize.x];
+function movePlayer(desiredX, desiredY, maze, player) {
+    var locInMaze = maze[desiredY][desiredX];
     if (locInMaze == 1) {
-        player.loc = {
-            x: desiredX,
-            y: desiredY
-        };
-        e['player'].locX = desiredX;
-        e['player'].locY = desiredY;
+        Heroes.update({name: player}, {name: player, loc:{x: desiredX, y: desiredY}});
         return true;
 
     } else {
@@ -162,20 +152,29 @@ function movePlayer(desiredX, desiredY) {
 function createMap(name, mapGenerator){
 	var generator = new mapGenerator(size.x / tileSize.x, size.y / tileSize.y);
 	var mainMap = generator.buildCave(2);
+    placePlayerInMap(mainMap, "hero1");
 	Mazes.insert({name: name, map: mainMap});	
 }
-
 
 function redoMap(name, mapGenerator){
     var generator = new mapGenerator(size.x / tileSize.x, size.y / tileSize.y);
     var mainMap = generator.buildCave(2);
+    console.log(placePlayerInMap(mainMap, "hero1"));
     return Mazes.update({name: name}, {map: mainMap});
+}
+
+function createHero(name, location){
+    return Heroes.insert({name: name, loc: {x: location.x * tileSize.x, y:location.y * tileSize.y}})
+
 }
 Meteor.startup(function() {
 
 	if(Mazes.find().fetch().length === 0){
 		createMap("level1", mapGenerator);
 	}
+    if(Heroes.find().fetch().length === 0){
+        createHero("hero1", {x: 0, y:0});
+    }
    // code to run on server at startup
 });
 
@@ -187,15 +186,28 @@ Meteor.publish('mazes', function(){
 	return Mazes.find();
 });
 
-Deps.autorun(function(){
-
+Meteor.publish('heroes', function(){
+    return Heroes.find();
 });
 
 Meteor.methods({
    newCommand: function(command, userId){
         Commands.insert({text: command, when: new Date()});
+        var player;
+        if(Heroes.find({name: "hero1"}).fetch()) {
+            player = Heroes.find({name: "hero1"}).fetch()[0];
+            console.log(player.loc);
+        }
         if(command === "newmap"){
             return redoMap(Mazes.findOne().name, mapGenerator);
+        }else if (command == "down") {
+            return movePlayer(player.loc.x, player.loc.y + 1, Mazes.findOne().map, player.name);
+        }else if (command == "left") {
+            return movePlayer(player.loc.x - 1, player.loc.y, Mazes.findOne().map, player.name);
+        }else if (command == "up") {
+            return movePlayer(player.loc.x, player.loc.y - 1, Mazes.findOne().map, player.name);
+        }else if (command == "right") {
+            return movePlayer(player.loc.x + 1, player.loc.y, Mazes.findOne().map, player.name);
         }else{
             return command;
         }

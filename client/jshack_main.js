@@ -130,14 +130,9 @@ function drawMap(map, index) {
         }
     }
 }
-function drawPlayer() {
-    if (e['player']) {
-        //Yes! Good
+function drawPlayer(player) {
 
-    } else {
-        //Bad! Let's draw him.
-        drawImage(playerImg, player.loc.x, player.loc.y, 5, 'player', e);
-    }
+    drawImage(playerImg, player.loc.x * tileSize.x, player.loc.y*tileSize.y, 5, 'player', e);
 }
 function mapTileHandler(tileNumber) {
 
@@ -226,13 +221,6 @@ Meteor.startup(function(){
 
 
     //The player object
-    player = {
-        loc: {
-            x: 0,
-            y: 0
-        },
-        image: playerImg
-    };
 
     //we need some events dear watson
     window.addEventListener("load", eventWindowLoaded, false);
@@ -253,7 +241,6 @@ Meteor.startup(function(){
         
         changeCanvasSize(canvas, size.x, size.y);
         changeCanvasSize(guiCanvas, guiSize.x, guiSize.y);
-        drawPlayer();
         //drawBox("#930c16", guiCanvas.width, guiCanvas.height, 0, 0, 0, 'gui', g);
         //JSHack();
     }
@@ -304,11 +291,16 @@ Meteor.startup(function(){
     Deps.autorun(function(){
         if(Mazes.findOne()){
             drawMap(Mazes.findOne().map, 1);
-            drawPlayer();
+            if(Heroes.findOne()){
+                drawPlayer(Heroes.findOne());
+            }
 
             drawScreen(e, c);
             drawScreen(g, gui);
             console.log(Mazes.findOne());
+        }
+        if(Heroes.findOne()){
+            drawPlayer(Heroes.findOne());
         }
 
 

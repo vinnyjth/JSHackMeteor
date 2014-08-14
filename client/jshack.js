@@ -1,7 +1,6 @@
 Meteor.subscribe('commands');
 Meteor.subscribe('mazes');
-
-
+Meteor.subscribe('heroes');
 
 Template.sidebar.helpers({
     commands: function() {
